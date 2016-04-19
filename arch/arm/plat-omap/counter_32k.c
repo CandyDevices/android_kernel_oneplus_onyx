@@ -20,6 +20,8 @@
 #include <linux/clocksource.h>
 #include <linux/sched_clock.h>
 
+#include <asm/mach/time.h>
+
 #include <plat/hardware.h>
 #include <plat/common.h>
 #include <plat/board.h>
