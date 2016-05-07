@@ -399,7 +399,7 @@ static void __init arch_timer_counter_init(void)
 {
 	clocksource_register_hz(&clocksource_counter, arch_timer_rate);
 
-	sched_clock_register(arch_timer_update_sched_clock, 32, arch_timer_rate);
+	sched_clock_register(arch_timer_update_sched_clock, 56, arch_timer_rate);
 
 	/* Use the architected timer for the delay loop. */
 	arch_delay_timer.read_current_timer = &arch_timer_read_current_timer;
