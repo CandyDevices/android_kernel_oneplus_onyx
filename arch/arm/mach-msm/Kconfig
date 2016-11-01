@@ -3030,9 +3030,15 @@ config HAS_MACH_MEMUTILS
 	help
 	Faster memcpy performance for Krait
 
+config AUTOSMP
+	bool "AutoSMP Hotplug"
+	depends on SMP && HOTPLUG_CPU
+	help
+	  Automatically hotplugs the multiple CPU cores based on
+	  CPU load and suspend state.
+
 config MSM_CPU_VOLTAGE_CONTROL
 	bool "Userspace CPU Voltage Control"
-	default y
 	help
 	  This enables userspace CPU Voltage Control.
 
