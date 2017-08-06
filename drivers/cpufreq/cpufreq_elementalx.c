@@ -33,26 +33,26 @@
 #include <trace/events/cpufreq_elementalx.h>
 
 #include <mach/kgsl.h>
-static int orig_up_threshold = 90;
+static int orig_up_threshold = 99;
 static int g_count = 0;
 
 #define DEF_SAMPLING_RATE			(30000)
-#define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(3)
-#define DEF_FREQUENCY_UP_THRESHOLD		(90)
-#define DEF_SAMPLING_DOWN_FACTOR		(1)
+#define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(8)
+#define DEF_FREQUENCY_UP_THRESHOLD		(99)
+#define DEF_SAMPLING_DOWN_FACTOR		(5)
 #define MAX_SAMPLING_DOWN_FACTOR		(100000)
-#define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(3)
-#define MICRO_FREQUENCY_UP_THRESHOLD		(90)
+#define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(6)
+#define MICRO_FREQUENCY_UP_THRESHOLD		(99)
 #define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(10000)
-#define MIN_FREQUENCY_UP_THRESHOLD		(11)
+#define MIN_FREQUENCY_UP_THRESHOLD		(24)
 #define MAX_FREQUENCY_UP_THRESHOLD		(100)
-#define MIN_FREQUENCY_DOWN_DIFFERENTIAL		(1)
+#define MIN_FREQUENCY_DOWN_DIFFERENTIAL		(3)
 #define UI_DYNAMIC_SAMPLING_RATE		(30000)
 #define DBS_SWITCH_MODE_TIMEOUT			(1000)
 #define INPUT_EVENT_MIN_TIMEOUT 		(0)
 #define INPUT_EVENT_MAX_TIMEOUT 		(3000)
-#define INPUT_EVENT_TIMEOUT			(500)
-#define MIN_SAMPLING_RATE_RATIO			(2)
+#define INPUT_EVENT_TIMEOUT			(0)
+#define MIN_SAMPLING_RATE_RATIO			(4)
 #define DEF_OPTIMAL_FREQ			(300000)
 
 static unsigned int min_sampling_rate;
@@ -120,7 +120,7 @@ static unsigned long input_event_boost_expired = 0;
 static	struct cpufreq_frequency_table *tbl = NULL;
 static unsigned int *tblmap[TABLE_SIZE] __read_mostly;
 static unsigned int tbl_select[4];
-static unsigned int up_threshold_level[2] __read_mostly = {90, 85};
+static unsigned int up_threshold_level[2] __read_mostly = {95, 90};
 static int input_event_counter = 0;
 struct timer_list freq_mode_timer;
 
@@ -155,7 +155,7 @@ static struct dbs_tuners {
 	.down_differential_multi_core = MICRO_FREQUENCY_DOWN_DIFFERENTIAL,
 	.up_threshold_any_cpu_load = DEF_FREQUENCY_UP_THRESHOLD,
 	.ignore_nice = 0,
-	.powersave_bias = 0,
+	.powersave_bias = 1,
 	.sync_freq = 0,
 	.optimal_freq = DEF_OPTIMAL_FREQ,
 	.io_is_busy = 1,
@@ -351,7 +351,7 @@ static ssize_t store_input_event_timeout(struct kobject *a, struct attribute *b,
 	return count;
 }
 
-static int two_phase_freq_array[NR_CPUS] = {[0 ... NR_CPUS-1] = 1728000} ;
+static int two_phase_freq_array[NR_CPUS] = {1497600, 1497600, 1190400, 1190400} ;
 
 static ssize_t show_two_phase_freq
 (struct kobject *kobj, struct attribute *attr, char *buf)
@@ -387,7 +387,7 @@ static ssize_t store_two_phase_freq(struct kobject *a, struct attribute *b,
 	return count;
 }
 
-static int input_event_min_freq_array[NR_CPUS] = {1728000, 1267200, 1267200, 1267200} ;
+static int input_event_min_freq_array[NR_CPUS] = {0, 0, 0, 0} ;
 
 static ssize_t show_input_event_min_freq
 (struct kobject *kobj, struct attribute *attr, char *buf)
